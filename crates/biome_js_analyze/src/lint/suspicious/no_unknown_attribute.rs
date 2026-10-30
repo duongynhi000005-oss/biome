@@ -1072,7 +1072,7 @@ fn get_standard_name(ctx: &RuleContext<NoUnknownAttribute>, name: &str) -> Optio
     let is_react_19_or_later = ctx
         .manifest
         .as_ref()
-        .is_some_and(|manifest| manifest.matches_dependency("react", ">=19.0.0"));
+        .map_or(true, |manifest| manifest.matches_dependency("react", ">=19.0.0"));
 
     if is_react_19_or_later {
         if let Some(prop) = find_ignore_ascii_case(REACT_19_PROPS, name) {
