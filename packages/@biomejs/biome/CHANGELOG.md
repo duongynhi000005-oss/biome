@@ -1,5 +1,102 @@
 # @biomejs/biome
 
+## 2.6.5
+
+### Patch Changes
+
+- [#12675](https://github.com/biomejs/biome/pull/12675) [`2a16d59`](https://github.com/biomejs/biome/commit/2a16d59c3ea4e4875b2b3dd9c79bba4055442fcc) Thanks [@dyc3](https://github.com/dyc3)! - Added the new nursery rule [`useVueConsistentDefineEmitsDeclaration`](https://biomejs.dev/linter/rules/use-vue-consistent-define-emits-declaration/), which enforces one declaration style for `defineEmits` in `<script setup lang="ts">`. By default, events must be declared with a type. The `style` option can instead require each event to be a property of that type, such as `change: [id: number]`, or require an argument, such as `defineEmits(["change"])`.
+  
+  ```vue
+  <script setup lang="ts">
+  const emit = defineEmits(["change", "update"]);
+  </script>
+  ```
+
+- [#12746](https://github.com/biomejs/biome/pull/12746) [`2ebd7b6`](https://github.com/biomejs/biome/commit/2ebd7b6e70159e1f91c09f965a229321e0a8c56d) Thanks [@ematipico](https://github.com/ematipico)! - Improved [#2730](https://github.com/biomejs/biome/issues/2730): Biome now reports the active analyzer rule and source range when a rule panics, and suggests disabling the rule as a workaround.
+
+- [#12758](https://github.com/biomejs/biome/pull/12758) [`1df6d85`](https://github.com/biomejs/biome/commit/1df6d855ef2bcc97107a83ec3cca43e10b72a178) Thanks [@dyc3](https://github.com/dyc3)! - Fixed [#12739](https://github.com/biomejs/biome/issues/12739), [#12741](https://github.com/biomejs/biome/issues/12741), and [#12742](https://github.com/biomejs/biome/issues/12742): the Markdown formatter now adds a blank line between a top-level paragraph and a header, fenced code block, list, or blockquote that directly follows it, matching Prettier.
+  
+  ```diff
+   Some text:
+  +
+   - bullet 1
+   - bullet 2
+  ```
+
+- [#12762](https://github.com/biomejs/biome/pull/12762) [`69187a9`](https://github.com/biomejs/biome/commit/69187a9f5276f9bdc9b0087d898e4e3b544eafbb) Thanks [@dyc3](https://github.com/dyc3)! - Fixed [#12738](https://github.com/biomejs/biome/issues/12738): the Markdown formatter now collapses consecutive blank lines between blocks into a single blank line.
+  
+  ```diff
+   Some paragraph.
+  
+  -
+  -
+   ## Next section
+  ```
+
+- [#12708](https://github.com/biomejs/biome/pull/12708) [`e87ec37`](https://github.com/biomejs/biome/commit/e87ec37e9c1737f44b6e2bcb6f7bf9fbc08e92c2) Thanks [@nhedger](https://github.com/nhedger)! - Fixed `.editorconfig` section globs that skipped the character following a bracket expression. For example, `[{[ab],c}.json]` now matches `a.json`, `b.json`, and `c.json`.
+
+- [#12747](https://github.com/biomejs/biome/pull/12747) [`397b0eb`](https://github.com/biomejs/biome/commit/397b0eb28ca9d5a5eadc552d0a81b45540611d79) Thanks [@ematipico](https://github.com/ematipico)! - Fixed [#8094](https://github.com/biomejs/biome/issues/8094): Biome's language server now skips unchanged dynamic capability registrations, preventing duplicate watched-file notifications in affected editors.
+
+- [#12708](https://github.com/biomejs/biome/pull/12708) [`e87ec37`](https://github.com/biomejs/biome/commit/e87ec37e9c1737f44b6e2bcb6f7bf9fbc08e92c2) Thanks [@nhedger](https://github.com/nhedger)! - Fixed [#12683](https://github.com/biomejs/biome/issues/12683): `.editorconfig` section globs with nested braces, such as `[{*.{js,json},biome.jsonc}]`, are now supported instead of being ignored.
+
+- [#12771](https://github.com/biomejs/biome/pull/12771) [`86be8b8`](https://github.com/biomejs/biome/commit/86be8b84db6218cb3d89c0cfabc4f97388d9beb5) Thanks [@ematipico](https://github.com/ematipico)! - Fixed the formatter removing the parentheses that end an optional chain when a non-null assertion, type arguments or more parentheses follow them. The output either short-circuited the rest of the chain, as in `a?.b!.c` for `(a?.b)!.c`, or didn't parse, as with `new a?.b!()`, a template tag or an assignment target.
+  
+  ```diff
+  - a?.b!.c;
+  + (a?.b)!.c;
+  - new a?.b!();
+  + new (a?.b)!();
+  - a?.b`template`;
+  + (a?.b)`template`;
+  ```
+
+- [#12769](https://github.com/biomejs/biome/pull/12769) [`6d23980`](https://github.com/biomejs/biome/commit/6d239806a8c851dc1f309f0d283e7cd418c274fe) Thanks [@ematipico](https://github.com/ematipico)! - Fixed [#12757](https://github.com/biomejs/biome/issues/12757): the Markdown formatter no longer turns an indented paragraph line that starts with `-`, `1.`, `#`, or `>` into a list, heading, or blockquote. Such a line now joins the previous line, matching Prettier.
+  
+  ```diff
+  -- Item
+  -      - Nested item
+  +- Item - Nested item
+     continuation line
+  ```
+
+- [#12737](https://github.com/biomejs/biome/pull/12737) [`162ed76`](https://github.com/biomejs/biome/commit/162ed76924abe28d4620a627ce54965e9845bd73) Thanks [@xgbtxy](https://github.com/xgbtxy)! - Fixed [#12726](https://github.com/biomejs/biome/issues/12726): [`useMathMinMax`](https://biomejs.dev/linter/rules/use-math-min-max/) now recognizes directly listed nonnumeric elements in array reductions, such as `["foo", "bar"].reduce((a, b) => a > b ? a : b)`. This also covers Date values and local constant arrays used only by reductions, including parentheses and TypeScript assertions. Spread elements and other unclassified inputs retain their existing behavior.
+
+- [#12769](https://github.com/biomejs/biome/pull/12769) [`6d23980`](https://github.com/biomejs/biome/commit/6d239806a8c851dc1f309f0d283e7cd418c274fe) Thanks [@ematipico](https://github.com/ematipico)! - Fixed [#12768](https://github.com/biomejs/biome/issues/12768): the Markdown formatter no longer splits a blockquote in two when an empty `>` line separates its list items.
+  
+  ```diff
+   > - one
+   > - two
+  -
+  +>
+   > - three
+  ```
+
+- [#12769](https://github.com/biomejs/biome/pull/12769) [`6d23980`](https://github.com/biomejs/biome/commit/6d239806a8c851dc1f309f0d283e7cd418c274fe) Thanks [@ematipico](https://github.com/ematipico)! - Fixed [#12767](https://github.com/biomejs/biome/issues/12767): the Markdown formatter no longer moves a list item out of a blockquote when the item follows a nested list item. The formatter also keeps the `>` of a line that directly follows a list inside a blockquote and starts a nested blockquote, a heading, or a different list.
+  
+  ```diff
+   > - one
+   >   - nested
+  -  - two
+  +> - two
+  ```
+
+- [#12769](https://github.com/biomejs/biome/pull/12769) [`6d23980`](https://github.com/biomejs/biome/commit/6d239806a8c851dc1f309f0d283e7cd418c274fe) Thanks [@ematipico](https://github.com/ematipico)! - Fixed [#12703](https://github.com/biomejs/biome/issues/12703): the Markdown formatter no longer indents the empty `>` line between a list and a paragraph in a blockquote. Formatting again no longer moves the paragraph out of the quote.
+  
+  ```diff
+   > - item one
+   >   continued.
+  -  >
+  +>
+   > Paragraph line one
+   > line two.
+  ```
+
+- [#12771](https://github.com/biomejs/biome/pull/12771) [`5127af1`](https://github.com/biomejs/biome/commit/5127af14387870e242ac3e5070bee4796c07783c) Thanks [@ematipico](https://github.com/ematipico)! - Expanded [`useLogicalProperties`](https://biomejs.dev/linter/rules/use-logical-properties) to report multi-value physical shorthands and logical longhand pairs that can be combined. Dynamic shorthands such as `padding: var(--spacing) 2px` are also reported without an automatic fix because the variable may supply multiple values.
+  
+  ---
+
+- [#12708](https://github.com/biomejs/biome/pull/12708) [`e87ec37`](https://github.com/biomejs/biome/commit/e87ec37e9c1737f44b6e2bcb6f7bf9fbc08e92c2) Thanks [@nhedger](https://github.com/nhedger)! - Fixed `.editorconfig` section globs with unbalanced braces. As in the EditorConfig reference implementation, all braces in such a glob are now matched literally, so `[{a,b}}.json]` only matches a file named `{a,b}}.json`.
+
 ## 2.6.4
 
 ### Patch Changes
