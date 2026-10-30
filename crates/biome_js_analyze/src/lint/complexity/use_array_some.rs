@@ -305,6 +305,14 @@ fn detect_find_existence_comparison_pattern(
     call: &JsCallExpression,
     method_name: &str,
 ) -> Option<UseArraySomeState> {
+    let arguments = call.arguments().ok()?;
+    let first_arg = arguments.get_arguments().first()?;
+    if matches!(
+        first_arg.as_any_js_expression()?,
+        AnyJsExpression::AnyJsLiteralExpression(_) | AnyJsExpression::JsObjectExpression(_)
+    ) {
+        return None;
+    }
     let comparison = nearest_parent_binary_expression(call.syntax())?;
     let operator = comparison.operator().ok()?;
 
